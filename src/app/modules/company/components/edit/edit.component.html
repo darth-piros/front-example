@@ -1,3 +1,39 @@
-<p>
-  edit works!
-</p>
+<ng-container *ngIf="loading$ | async; else loaded">
+  <mat-spinner></mat-spinner>
+</ng-container>
+<ng-template #loaded>
+  <form novalidate #form="ngForm" (ngSubmit)="form.valid && save()" *ngIf="item$ | async as item">
+    <h1 mat-dialog-title>Edit company</h1>
+    <div mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          name="name"
+          required
+          maxlength="50"
+          [(ngModel)]="item.name"
+          #nameInput="ngModel"/>
+        <mat-error *ngIf="nameInput.errors?.required">
+          Field is required
+        </mat-error>
+        <mat-hint align="end">{{nameInput.value?.length || 0}} / 50</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input
+          matInput
+          name="description"
+          required
+          maxlength="250"
+          [(ngModel)]="item.description"
+          #descriptionInput="ngModel"/>
+        <mat-hint align="end">{{descriptionInput.value?.length || 0}} / 250</mat-hint>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+      <button type="button" mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
+      <button type="submit" mat-flat-button color="primary">Save</button>
+    </div>
+  </form>
+</ng-template>

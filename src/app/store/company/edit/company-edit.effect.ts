@@ -5,19 +5,20 @@ import { merge, Observable } from "rxjs";
 import { Action, Store } from "@ngrx/store";
 import * as fromCompanyEdit from "@app/store/company/edit/company-edit.actions";
 import { filter, map, mapTo, switchMap, tap, withLatestFrom } from "rxjs/operators";
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatSnackBar } from "@angular/material";
 import { EditComponent } from "@app/modules/company/components/edit/edit.component";
 import { MainState } from "@app/store/main.state";
 import { companyEditDialogRefSelector, companyEditItemSelector } from "@app/store/company/edit/company-edit.selector";
 
 @Injectable()
-export class CompanyEditEffects {
+export class CompanyEditEffect {
 
   constructor(
     private _actions$: Actions,
     private _companyService: CompanyService,
     private _matDialog: MatDialog,
-    private _store: Store<MainState>
+    private _store: Store<MainState>,
+    private _snackBar: MatSnackBar
   ) {}
 
   @Effect()
@@ -43,13 +44,14 @@ export class CompanyEditEffects {
     })
   );
 
-  @Effect({dispatch: false})
+  @Effect()
   cancel$ = this._actions$.pipe(
-    ofType<fromCompanyEdit.Canceled>(fromCompanyEdit.ActionTypes.CANCELED),
+    ofType<fromCompanyEdit.Cancel>(fromCompanyEdit.ActionTypes.CANCEL),
     withLatestFrom(
       this._store.pipe(companyEditDialogRefSelector())
     ),
-    tap(([action, dialogRef]) => dialogRef.close())
+    tap(([action, dialogRef]) => dialogRef.close()),
+    mapTo(new fromCompanyEdit.Canceled())
   );
 
   @Effect()
@@ -66,6 +68,7 @@ export class CompanyEditEffects {
             this._store.pipe(companyEditDialogRefSelector())
           ),
           tap(([company, dialogRef]) => dialogRef.close(company)),
+          tap(() => this._snackBar.open("Company is saved", null, {duration: 2000})),
           map(([data]) => new fromCompanyEdit.Saved(data))
         )
     )

@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  .loader {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+  }
+}

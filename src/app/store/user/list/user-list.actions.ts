@@ -1,12 +1,12 @@
 import { Action } from "@ngrx/store";
-import { Company } from "@app/models/company";
+import { User } from "@app/models/user";
 
 export enum ActionTypes {
-  LOAD = "[company.list] Load",
-  LOADED = "[company.list] Loaded",
-  DELETE = "[company.list] Delete",
-  DELETED = "[company.list] Deleted",
-  CLEAR = "[company.list] Clear",
+  LOAD = "[user.list] Load",
+  LOADED = "[user.list] Loaded",
+  DELETE = "[user.list] Delete",
+  DELETED = "[user.list] Deleted",
+  CLEAR = "[user.list] Clear",
 }
 
 export class Load implements Action {
@@ -17,7 +17,7 @@ export class Loaded implements Action {
   readonly type = ActionTypes.LOADED;
 
   constructor(
-    public payload: Company[]
+    public payload: User[]
   ) {}
 }
 

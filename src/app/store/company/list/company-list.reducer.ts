@@ -35,6 +35,23 @@ handlers[fromCompanyList.ActionTypes.LOADED] = function(
   };
 };
 
+handlers[fromCompanyList.ActionTypes.DELETED] = function(
+  state: CompanyListState,
+  action: fromCompanyList.Deleted
+): CompanyListState {
+  return {
+    ...state,
+    items: state.items.filter(a => a.id !== action.payload)
+  };
+};
+
+handlers[fromCompanyList.ActionTypes.CLEAR] = function(
+  state: CompanyListState,
+  action: fromCompanyList.Clear
+): CompanyListState {
+  return defaultFactory();
+};
+
 handlers[fromCompanyEdit.ActionTypes.SAVED] = function(
   state: CompanyListState,
   action: fromCompanyEdit.Saved

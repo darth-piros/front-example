@@ -1,7 +1,7 @@
-import { User } from "@app/models/user";
 import { UserEditState } from "@app/store/user/edit/user-edit.state";
+import { UserListState } from "@app/store/user/list/user-list.state";
 
 export interface UserState {
-  list: User[];
+  list: UserListState;
   edit: UserEditState;
 }

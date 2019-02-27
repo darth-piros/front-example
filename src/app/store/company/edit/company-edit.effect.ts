@@ -31,7 +31,7 @@ export class CompanyEditEffect {
         dialogRef
           .afterOpened()
           .pipe(
-            switchMap(() => this._companyService.getCompanyById(action.payload)),
+            switchMap(() => this._companyService.getById(action.payload)),
             map(data => new fromCompanyEdit.Loaded({company: data, dialogRef}))
           ),
         dialogRef
@@ -62,7 +62,7 @@ export class CompanyEditEffect {
     ),
     switchMap(([action, item]) =>
       this._companyService
-        .saveCompany(item)
+        .save(item)
         .pipe(
           withLatestFrom(
             this._store.pipe(companyEditDialogRefSelector())

@@ -1,14 +1,15 @@
 import { Action } from "@ngrx/store";
-import { Company } from "@app/models/company";
 import { MatDialogRef } from "@angular/material";
+import { User } from "@app/models/user";
 
 export enum ActionTypes {
-  EDIT = "[company.edit] Edit",
-  LOADED = "[company.edit] Loaded",
-  CANCEL = "[company.edit] Cancel",
-  CANCELED = "[company.edit] Canceled",
-  SAVE = "[company.edit] Save",
-  SAVED = "[company.edit] Saved",
+  CREATE = "[user.edit] CREATE",
+  EDIT = "[user.edit] Edit",
+  LOADED = "[user.edit] Loaded",
+  CANCEL = "[user.edit] Cancel",
+  CANCELED = "[user.edit] Canceled",
+  SAVE = "[user.edit] Save",
+  SAVED = "[user.edit] Saved",
 }
 
 export class Edit implements Action {
@@ -24,7 +25,7 @@ export class Loaded implements Action {
 
   constructor(
     public payload: {
-      company: Company;
+      user: User;
       dialogRef: MatDialogRef<any>
     }
   ) {}
@@ -46,6 +47,6 @@ export class Saved implements Action {
   readonly type = ActionTypes.SAVED;
 
   constructor(
-    public payload: Company
+    public payload: User
   ) {}
 }

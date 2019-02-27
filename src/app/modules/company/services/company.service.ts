@@ -3,27 +3,30 @@ import { Context } from "@app/in-memory-db";
 import { Company } from "@app/models/company";
 import { Observable, of } from "rxjs";
 import { delay } from "rxjs/operators";
+import { REQUEST_DELAY } from "@app/constants/request-delay.constant";
 
 @Injectable({
   providedIn: "root"
 })
 export class CompanyService {
 
-  readonly delay = 1500;
-
   constructor(
     private _context: Context
   ) { }
 
-  getCompanies(): Observable<Company[]> {
-    return of([...this._context.companies]).pipe(delay(this.delay));
+  getAll(): Observable<Company[]> {
+    return of([...this._context.companies]).pipe(delay(REQUEST_DELAY));
   }
 
-  getCompanyById(companyId: number): Observable<Company> {
-    return of({...this._context.companies.find(a => a.id === companyId)}).pipe(delay(this.delay));
+  getById(companyId: number): Observable<Company> {
+    return of({...this._context.companies.find(a => a.id === companyId)}).pipe(delay(REQUEST_DELAY));
   }
 
-  saveCompany(company: Company): Observable<Company> {
-    return of(this._context.addOrUpdateCompany(company)).pipe(delay(this.delay));
+  save(company: Company): Observable<Company> {
+    return of(this._context.addOrUpdateCompany(company)).pipe(delay(REQUEST_DELAY));
+  }
+
+  delete(companyId: number): Observable<boolean> {
+    return of(this._context.deleteCompany(companyId));
   }
 }

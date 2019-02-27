@@ -8,6 +8,9 @@ import {
   generateName, generateWord
 } from "@app/functions/generator.functions";
 
+let uniqueCompanyId = 0;
+let uniqueUserId = 0;
+
 export class Context {
 
   get companies(): ReadonlyArray<Company> {
@@ -34,35 +37,67 @@ export class Context {
 
     return {...company};
   }
+
+  deleteCompany(companyId: number): boolean {
+    this._companies = this._companies.filter(a => a.id !== companyId);
+    return true;
+  }
+
+  addOrUpdateUser(user: User): User {
+    const index = this.users.findIndex(a => a.id === user.id);
+    if (index >= 0) {
+      this._users = [
+        ...this.users.slice(0, index),
+        user,
+        ...this.users.slice(index + 1)
+      ];
+    } else {
+      this._users = [...this.users, user];
+    }
+
+    return {...user};
+  }
+
+  createUser(companyId: number): User {
+    return createUser(companyId);
+  }
+
+  deleteUser(userId: number): boolean {
+    this._users = this._users.filter(a => a.id !== userId);
+    return true;
+  }
 }
 
 export function contextFactory(): Context {
   const companies: Company[] = [];
   for (let i = 0; i < 15; i++) {
     companies.push({
-      id: i,
+      id: uniqueCompanyId++,
       name: generateCompanyName(),
       description: generateCompanyDescription()
     });
   }
 
   const users: User[] = [];
-  let userId = 0;
   for (const company of companies) {
     for (let i = 0; i < 3; i++) {
-      const name = generateName();
-      const firstName = generateFirstName();
-      const middleName = generateMiddleName();
-      users.push({
-        id: userId++,
-        companyId: company.id,
-        name,
-        firstName,
-        middleName,
-        email: `${name}.${firstName}@${company.name.replace(" ", ".")}.${generateWord(3)}`
-      });
+      users.push(createUser(company.id));
     }
   }
 
   return new Context(companies, users);
+}
+
+function createUser(companyId: number): User {
+  const name = generateName();
+  const firstName = generateFirstName();
+  const middleName = generateMiddleName();
+  return {
+    id: uniqueUserId++,
+    companyId,
+    name,
+    firstName,
+    middleName,
+    email: `${name}.${firstName}@${generateWord(7)}.${generateWord(3)}`
+  };
 }

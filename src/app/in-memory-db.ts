@@ -16,9 +16,7 @@ export class Context {
 
   private readonly _companies$: BehaviorSubject<Company[]>;
 
-  get companies$(): Observable<Company[]> {
-    return this._companies$.asObservable();
-  }
+  readonly companies$: Observable<Company[]>;
 
   get companies(): ReadonlyArray<Company> {
     return this._companies;
@@ -29,6 +27,7 @@ export class Context {
 
   constructor(private _companies: Company[], private _users: User[]) {
     this._companies$ = new BehaviorSubject<Company[]>(this._companies);
+    this.companies$ = this._companies$.asObservable();
   }
 
   addOrUpdateCompany(company: Company): Company {
@@ -50,10 +49,12 @@ export class Context {
   deleteCompany(companyId: number): number {
     this._companies = this._companies.filter(a => a.id !== companyId);
     this._users = this._users.filter(a => a.companyId !== companyId);
+
+    this._companies$.next(this._companies);
     if (this.companies.length > 0) {
       return this.companies[0].id;
     }
-    this._companies$.next(this._companies);
+
     return -1;
   }
 

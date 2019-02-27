@@ -1,4 +1,7 @@
 <mat-toolbar color="primary" class="toolbar">
+  <div class="selector-label">
+    Current company:
+  </div>
   <mat-form-field>
     <mat-select [value]="currentCompanyId$ | async" (valueChange)="changeCompany($event)">
       <mat-option *ngFor="let company of companies$ | async" [value]="company.id">{{company.name}}</mat-option>

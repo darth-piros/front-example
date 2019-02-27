@@ -7,7 +7,7 @@ import { userListItemsSelector, userListLoadingSelector } from "@app/store/user/
 import { currentCompanyIdSelector } from "@app/store/company/current-company-id/current-company-id.selector";
 import { distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { Clear, Delete, Load } from "@app/store/user/list/user-list.actions";
-import { Edit } from "@app/store/user/edit/user-edit.actions";
+import { Create, Edit } from "@app/store/user/edit/user-edit.actions";
 
 @Component({
   selector: "app-list",
@@ -41,7 +41,13 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this._destroyed$.next();
+    this._destroyed$.complete();
     this._store.dispatch(new Clear());
+  }
+
+  create() {
+    this._store.dispatch(new Create());
   }
 
   edit(userId: number) {

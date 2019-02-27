@@ -4,11 +4,12 @@ import { MatDialog, MatSnackBar } from "@angular/material";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Injectable } from "@angular/core";
 import { Action, Store } from "@ngrx/store";
-import { merge, Observable } from "rxjs";
+import { merge, Observable, of } from "rxjs";
 import * as fromUserEdit from "@app/store/user/edit/user-edit.actions";
 import { filter, map, mapTo, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { EditComponent } from "@app/modules/user/components/edit/edit.component";
 import { userEditDialogRefSelector, userEditItemSelector } from "@app/store/user/edit/user-edit.selector";
+import { currentCompanyIdSelector } from "@app/store/company/current-company-id/current-company-id.selector";
 
 @Injectable()
 export class UserEditEffects {
@@ -23,7 +24,33 @@ export class UserEditEffects {
   }
 
   @Effect()
-  load$: Observable<Action> = this._actions$.pipe(
+  create$: Observable<Action> = this._actions$.pipe(
+    ofType<fromUserEdit.Create>(fromUserEdit.ActionTypes.CREATE),
+    switchMap(action => {
+      const dialogRef = this._matDialog.open(EditComponent);
+
+      return merge(
+        dialogRef
+          .afterOpened()
+          .pipe(
+            withLatestFrom(
+              this._store.pipe(currentCompanyIdSelector())
+            ),
+            switchMap(([_, companyId]) => of(this._userService.create(companyId))),
+            map(data => new fromUserEdit.Loaded({user: data, dialogRef}))
+          ),
+        dialogRef
+          .afterClosed()
+          .pipe(
+            filter(result => result == null),
+            mapTo(new fromUserEdit.Cancel())
+          )
+      );
+    })
+  );
+
+  @Effect()
+  edit$: Observable<Action> = this._actions$.pipe(
     ofType<fromUserEdit.Edit>(fromUserEdit.ActionTypes.EDIT),
     switchMap(action => {
       const dialogRef = this._matDialog.open(EditComponent);

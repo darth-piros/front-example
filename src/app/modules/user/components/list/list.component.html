@@ -4,6 +4,7 @@
   </div>
 </ng-container>
 <ng-template #table>
+  <button type="button" mat-flat-button color="primary" (click)="create()">Add new user</button>
   <table mat-table [dataSource]="users$" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>

@@ -5,6 +5,10 @@
 
   .toolbar {
     justify-content: flex-end;
+
+    .selector-label {
+      margin-right: 16px;
+    }
   }
 
   .mat-sidenav-container {

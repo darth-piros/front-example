@@ -12,6 +12,10 @@ export enum ActionTypes {
   SAVED = "[user.edit] Saved",
 }
 
+export class Create implements Action {
+  readonly type = ActionTypes.CREATE;
+}
+
 export class Edit implements Action {
   readonly type = ActionTypes.EDIT;
 

@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { MainState } from "@app/store/main.state";
 import { currentCompanyIdSelector } from "@app/store/company/current-company-id/current-company-id.selector";
 import { SetId } from "@app/store/company/current-company-id/current-company-id.actions";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-root",
@@ -26,16 +26,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.companies$ = this._context.companies$.pipe(
-      map(companies => [...companies].sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        } else if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      }))
-    );
+    this.companies$ = this._context.companies$;
     this.currentCompanyId$ = this._store.pipe(currentCompanyIdSelector());
   }
 

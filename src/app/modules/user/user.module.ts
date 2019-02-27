@@ -10,9 +10,10 @@ import { userReducer } from "@app/store/user/user.reducer";
 import { EffectsModule } from "@ngrx/effects";
 import { UserEditEffects } from "@app/store/user/edit/user-edit.effects";
 import { UserListEffects } from "@app/store/user/list/user-list.effects";
+import { ListComponent } from "./components/list/list.component";
 
 @NgModule({
-  declarations: [EditComponent],
+  declarations: [EditComponent, ListComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -23,6 +24,9 @@ import { UserListEffects } from "@app/store/user/list/user-list.effects";
       UserEditEffects,
       UserListEffects
     ])
+  ],
+  entryComponents: [
+    EditComponent
   ]
 })
 export class UserModule { }

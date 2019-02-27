@@ -26,7 +26,7 @@ export class CompanyService {
     return of(this._context.addOrUpdateCompany(company)).pipe(delay(REQUEST_DELAY));
   }
 
-  delete(companyId: number): Observable<boolean> {
+  delete(companyId: number): Observable<number> {
     return of(this._context.deleteCompany(companyId));
   }
 }

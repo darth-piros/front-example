@@ -2,10 +2,13 @@ import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { CompanyService } from "@app/modules/company/services/company.service";
 import { Observable } from "rxjs";
-import { Action } from "@ngrx/store";
+import { Action, Store } from "@ngrx/store";
 import * as fromCompanyList from "@app/store/company/list/company-list.actions";
-import { filter, map, mapTo, switchMap, tap } from "rxjs/operators";
+import { concatMap, filter, map, mapTo, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material";
+import { MainState } from "@app/store/main.state";
+import { currentCompanyIdSelector } from "@app/store/company/current-company-id/current-company-id.selector";
+import { SetId } from "@app/store/company/current-company-id/current-company-id.actions";
 
 @Injectable()
 export class CompanyListEffect {
@@ -13,7 +16,8 @@ export class CompanyListEffect {
   constructor(
     private _actions$: Actions,
     private _companyService: CompanyService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _store: Store<MainState>
   ) {}
 
   @Effect()
@@ -35,9 +39,18 @@ export class CompanyListEffect {
       this._companyService
         .delete(action.payload)
         .pipe(
-          filter(result => result),
+          withLatestFrom(
+            this._store.pipe(currentCompanyIdSelector()),
+          ),
           tap(() => this._snackBar.open("Company is deleted", null, {duration: 2000})),
-          mapTo(new fromCompanyList.Deleted(action.payload))
+          concatMap(([newCurrent, currentId]) => {
+            const result: Action[] = [new fromCompanyList.Deleted(action.payload)];
+            if (currentId === action.payload && newCurrent >= 0) {
+              result.push(new SetId(newCurrent));
+            }
+
+            return result;
+          })
         )
     )
   );

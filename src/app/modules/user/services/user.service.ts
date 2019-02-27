@@ -14,8 +14,8 @@ export class UserService {
     private _context: Context
   ) { }
 
-  getAll(): Observable<User[]> {
-    return of([...this._context.users]).pipe(delay(REQUEST_DELAY));
+  getByCompanyId(companyId: number): Observable<User[]> {
+    return of(this._context.users.filter(a => a.companyId === companyId)).pipe(delay(REQUEST_DELAY));
   }
 
   getById(userId: number): Observable<User> {

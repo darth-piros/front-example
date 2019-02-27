@@ -10,7 +10,7 @@ import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
 import { EffectsModule } from "@ngrx/effects";
 import { MainState } from "@app/store/main.state";
 import { storeLogger } from "ngrx-store-logger";
-import { FormsModule } from "@angular/forms";
+import { UserModule } from "@app/modules/user/user.module";
 
 export function logger(reducer: ActionReducer<MainState>) {
   return storeLogger()(reducer);
@@ -31,7 +31,8 @@ export const metaReducers = [logger];
 
     MaterialCompositionModule,
 
-    CompanyModule
+    CompanyModule,
+    UserModule
   ],
   providers: [
     {

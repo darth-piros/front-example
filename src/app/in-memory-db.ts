@@ -38,9 +38,13 @@ export class Context {
     return {...company};
   }
 
-  deleteCompany(companyId: number): boolean {
+  deleteCompany(companyId: number): number {
     this._companies = this._companies.filter(a => a.id !== companyId);
-    return true;
+    this._users = this._users.filter(a => a.companyId !== companyId);
+    if (this.companies.length > 0) {
+      return this.companies[0].id;
+    }
+    return -1;
   }
 
   addOrUpdateUser(user: User): User {

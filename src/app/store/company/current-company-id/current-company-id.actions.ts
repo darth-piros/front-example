@@ -8,6 +8,6 @@ export class SetId implements Action {
   readonly type = ActionTypes.SET;
 
   constructor(
-    public payload: string
+    public payload: number
   ) {}
 }

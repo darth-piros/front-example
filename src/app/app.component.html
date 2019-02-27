@@ -1,3 +1,10 @@
+<mat-toolbar color="primary" class="toolbar">
+  <mat-form-field>
+    <mat-select [value]="currentCompanyId$ | async" (valueChange)="changeCompany($event)">
+      <mat-option *ngFor="let company of companies$ | async" [value]="company.id">{{company.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav mode="side" opened>
     <mat-nav-list>

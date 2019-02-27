@@ -7,11 +7,18 @@ import {
   generateMiddleName,
   generateName, generateWord
 } from "@app/functions/generator.functions";
+import { BehaviorSubject, Observable } from "rxjs";
 
 let uniqueCompanyId = 0;
 let uniqueUserId = 0;
 
 export class Context {
+
+  private readonly _companies$: BehaviorSubject<Company[]>;
+
+  get companies$(): Observable<Company[]> {
+    return this._companies$.asObservable();
+  }
 
   get companies(): ReadonlyArray<Company> {
     return this._companies;
@@ -21,6 +28,7 @@ export class Context {
   }
 
   constructor(private _companies: Company[], private _users: User[]) {
+    this._companies$ = new BehaviorSubject<Company[]>(this._companies);
   }
 
   addOrUpdateCompany(company: Company): Company {
@@ -35,6 +43,7 @@ export class Context {
       this._companies = [...this.companies, company];
     }
 
+    this._companies$.next(this._companies);
     return {...company};
   }
 
@@ -44,6 +53,7 @@ export class Context {
     if (this.companies.length > 0) {
       return this.companies[0].id;
     }
+    this._companies$.next(this._companies);
     return -1;
   }
 

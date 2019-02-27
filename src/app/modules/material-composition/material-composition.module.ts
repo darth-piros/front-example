@@ -4,10 +4,10 @@ import {
   MatButtonModule,
   MatDialogModule, MatFormFieldModule,
   MatIconModule, MatInputModule,
-  MatListModule, MatProgressSpinnerModule,
+  MatListModule, MatProgressSpinnerModule, MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatTableModule
+  MatTableModule, MatToolbarModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -28,7 +28,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatSelectModule
   ]
 })
 export class MaterialCompositionModule { }

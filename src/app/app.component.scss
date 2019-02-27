@@ -1,9 +1,14 @@
 :host {
-  display: block;
+  display: flex;
+  flex-flow: column;
   height: 100%;
 
+  .toolbar {
+    justify-content: flex-end;
+  }
+
   .mat-sidenav-container {
-    height: 100%;
+    flex: 1;
   }
 
   .mat-sidenav-content {
